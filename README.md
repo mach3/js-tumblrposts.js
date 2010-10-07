@@ -39,6 +39,7 @@ Usage
 	posts.bind( posts.EVENT_PROGRESS, function(e){
 		console.log( this.getLoadedRate() + "% Loaded" );
     });
+	posts.run();
 
 
 Author
