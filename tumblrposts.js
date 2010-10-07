@@ -1,18 +1,31 @@
 /*!
  * TumblrPost Class 
- * @version 1.0
+ * @version 1.1
  * @author mach3
  * @requires jQuery, jQuery.class.js
  */
  
  /**
- * Class for dealing with Tumblr Posts through JSONP access.
- * @class
+ * Create an instance of TumblrPosts Class
+ * @class Class for dealing with Tumblr Posts through JSONP access
+ * @param {Object} config Configuration definition
  * @example var posts = new TumblrPosts({ domain:"example.tumblr.com", maxNum:150 });
  */
-var TumblrPosts = Class.get({
+var TumblrPosts = Class.create();
+TumblrPosts.prototype = {
 	
+	/**
+	 * Name of complete event as string ( default "complete" )
+	 * @constant
+	 * @type String
+	 */
 	EVENT_COMPLETE:"complete",
+	
+	/**
+	 * Name of progress event as string ( default "progress" )
+	 * @constant
+	 * @type String
+	 */
 	EVENT_PROGRESS:"progress",
 	
 	config:{
@@ -29,19 +42,18 @@ var TumblrPosts = Class.get({
 	num:50,
 	
 	/**
-	 * Method to initialize TumblrPosts Class
 	 * @constructor
-	 * @param {Object} config Configuration definition.
+	 * @ignore
 	 */
 	initialize:function( config  ){
 		$.extend( this.config, config );
 		this.api = ( this.config.domain ) ? "http://" + this.config.domain + this.api : this.api
 	},
+	
 	/**
-	 * Method to start loading Tumblr's API and reading the posts.
-	 * 	Progress, or Complete event is fired.
-	 * @param {Object} data Object passed by JSONP access
-	 * @param {String} status Status name as string, passed by jQuery.ajax method
+	 * Start loading Tumblr API and reading the posts.
+	 * @param {Object} data Object passed by jQuery method. ( Normaly you don't need to pass )
+	 * @param {String} status Status name passed by jQuery method. ( Normaly you don't need to pass )
 	 */
 	run:function( data, status ){
 		var s = this,
@@ -81,9 +93,10 @@ var TumblrPosts = Class.get({
 			}
 		});
 	},
+	
 	/**
-	 * Method to get list of tags from all the posts.
-	 * @return {Array} Tags Array with objects which holds tag name and counts.
+	 * Get list of the tags from all the posts.
+	 * @returns {Array} Tags Array with objects which holds tag name and counts.
 	 */
 	getTags: function(){
 		var s = this,
@@ -107,15 +120,16 @@ var TumblrPosts = Class.get({
 		}
 		return this.tags;
 	},
+	
 	/**
 	 * Method to get list of the posts, you may use this when making the updated list.
 	 * @param {Number} offset Number to start with. 
 	 * @param {Number} count Count of posts you want to get.
 	 * @return {Array} posts The list of posts.
 	 */
-	getPosts: function( o, c ){
-		var offset = o || 0,
-			count = c || 10,
+	getPosts: function( offset, count ){
+		var offset = offset || 0,
+			count = count || 10,
 			result = [];
 		
 		$.each( this.posts, function(i,p){
@@ -125,10 +139,11 @@ var TumblrPosts = Class.get({
 		});
 		return result;
 	},
+	
 	/**
-	 * Method to get Title by posts
+	 * Get title from the post object.
 	 * @param {Object} post Tumblr Post Object
-	 * @param {Number} count Number you want to extract from the title strings.
+	 * @param {Number} count Character count you want to extract from the title strings.
 	 * @return {String} title Title of Post
 	 */
 	getTitleByPost: function( post, count ){
@@ -142,13 +157,14 @@ var TumblrPosts = Class.get({
 		title = ( count ) ? title.substr( 0, count ) : title;
 		return title;
 	},
+	
 	/**
-	 * Method to get the rate how does the loading of JSONs progress.
-	 * 	You may use this when Progress event fired.
+	 * Get the rate how does the loading API progress.
+	 * 	You may use this when progress event fired.
 	 * @return {Number} number Integer of the rate.
 	 */
 	getLoadedRate:function(){
 		return Math.floor( 100 * this.posts.length / 
 			Math.min(this.postsTotal, (this.config.maxNum||this.postsTotal) ) );
 	}
-});
+};
