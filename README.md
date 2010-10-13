@@ -40,10 +40,32 @@ TumblrPosts is a class for dealing with tumblr posts through JSONP access.
 	posts.run();
 
 
-##Method
 
 
+##Methods
 
+### run() : void
+
+Start to load Tumblr API and reading the posts.  
+"complete" event is fired when it's done.
+"progress" event is fired when it goes to load next JSON.
+
+### getTags() : Array
+
+Get list of the tags from all the posts it read.
+
+### getPosts() : Array
+
+Get list of the tumblr post objects.  
+You may use this when displaying the latest posts list.
+
+### getTitleByPost() : Stirng
+
+Get title from the tumblr post objects.  
+
+### getLoadedRate() : Number
+
+Get the rate how does the loading API progress.
 
 	
 ##Author
@@ -55,7 +77,7 @@ TumblrPosts is a class for dealing with tumblr posts through JSONP access.
 
 ##License
 
-The MIT License
+###The MIT License
 
 Copyright (c) 2010, matsukaze.
 
