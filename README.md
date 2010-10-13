@@ -1,26 +1,25 @@
-TumblrPosts Class
-=====
+#TumblrPosts Class
 
 version:1.1
 
 TumblrPosts is a class for dealing with tumblr posts through JSONP access.
 
-This does
------
+##This does
+
 
 - Get a list of (all) the posts from Tumblr API through JSONP access.
 - Get a list of tags.
 - Get a post title from "Tumblr Post" object passed by API.
 - Fire the events when loading process goes, or is completed.
 
-Requires
------
+##Requires
+
 
 - [jQuery](http://jquery.com)
 - [jQuery.class.js](http://github.com/mach3/js-jquery-class)
 
-Usage
------
+##Usage
+
 
     var posts = new TumblrPost({
 		domain:"example.tumblr.com",
@@ -41,22 +40,21 @@ Usage
 	posts.run();
 
 
-Method
------
+##Method
 
-test
-	: test
+
+
 
 	
-Author
------
+##Author
+
 
 - [blog.mach3.jp](http://blog.mach3.jp/)
 - [follow @mach3ss](http://twitter.com/mach3ss)
 
 
-License
------
+##License
+
 The MIT License
 
 Copyright (c) 2010, matsukaze.
