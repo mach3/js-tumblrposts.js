@@ -149,8 +149,9 @@ TumblrPosts.prototype = {
 	getTitleByPost: function( post, count ){
 		var title = post["regular-title"]
 			|| post["photo-caption"]
-			|| post["regular-body"]
 			|| post["video-caption"]
+			|| post["regular-body"]
+			|| post["type"]
 			|| "" ;
 		
 		title = title.replace( /\<.+?\>/gi, "" );
