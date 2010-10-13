@@ -1,8 +1,9 @@
 /*!
  * TumblrPost Class 
+ * Copyright (c) 2010, matsukaze.
  * @version 1.1
  * @author mach3
- * @requires jQuery, jQuery.class.js
+ * @requires jQuery <http://jquery.com>, jQuery.class.js <http://github.com/mach3/js-jquery-class>
  */
  
  /**
