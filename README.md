@@ -41,6 +41,13 @@ Usage
 	posts.run();
 
 
+Method
+-----
+
+test
+: test
+
+	
 Author
 -----
 
