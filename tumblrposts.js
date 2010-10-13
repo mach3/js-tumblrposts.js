@@ -150,6 +150,7 @@ TumblrPosts.prototype = {
 		var title = post["regular-title"]
 			|| post["photo-caption"]
 			|| post["regular-body"]
+			|| post["video-caption"]
 			|| "" ;
 		
 		title = title.replace( /\<.+?\>/gi, "" );
