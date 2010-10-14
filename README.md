@@ -1,6 +1,6 @@
 #TumblrPosts Class
 
-version:1.1
+version:1.2
 
 TumblrPosts is a class for dealing with tumblr posts through JSONP access.
 
