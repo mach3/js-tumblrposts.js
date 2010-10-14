@@ -1,7 +1,7 @@
 /*!
  * TumblrPost Class 
  * Copyright (c) 2010, matsukaze.
- * @version 1.1
+ * @version 1.2
  * @author mach3
  * @requires jQuery <http://jquery.com>, jQuery.class.js <http://github.com/mach3/js-jquery-class>
  */
@@ -58,28 +58,34 @@ TumblrPosts.prototype = {
 	 */
 	run:function( data, status ){
 		var s = this,
-			abort = false;
-		
+			complete = false;
+
 		if( !!data ){
 			this.postsTotal = data["posts-total"];
-			this.offset += this.num;
 			this.allTags = this.allTags || "";
 			if( !data.posts.length ){
+				complete = true;
+			} else {
+				$.each( data.posts, function(i,p){
+					if( ( s.config.maxNum > 0 && s.posts.length >= s.config.maxNum ) ){
+						complete = true;
+						return false;
+					}
+					s.posts.push( p );
+					if( !p.tags ) return;
+					s.allTags += "," + p.tags.join(",");
+				});
+				if( this.posts.length >= this.postsTotal ){
+					complete = true;
+				}
+			}
+			if( complete ){
 				this.trigger( this.EVENT_COMPLETE );
 				return;
+			} else {
+				this.offset += this.num;
+				this.trigger( this.EVENT_PROGRESS );
 			}
-			$.each( data.posts, function(i,p){
-				if( s.config.maxNum > 0 && s.posts.length >= s.config.maxNum ){
-					s.trigger( s.EVENT_COMPLETE );
-					abort = true;
-					return false;
-				}
-				s.posts.push( p );
-				if( !p.tags ) return;
-				s.allTags += "," + p.tags.join(",");
-			});
-			if( abort ){ return; }
-			this.trigger( this.EVENT_PROGRESS );
 		}
 		
 		$.ajax({
