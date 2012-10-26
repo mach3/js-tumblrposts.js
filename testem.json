@@ -1,0 +1,7 @@
+{
+	"src_files" : [
+		"scripts/jquery.js",
+		"scripts/tumblrposts.js",
+		"tests/test-tumblrposts.js"
+	]
+}

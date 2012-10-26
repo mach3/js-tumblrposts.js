@@ -1,86 +1,105 @@
-#TumblrPosts Class
+# TumblrPosts.js
 
-version:1.2
+Tumblrのタグ一覧および投稿一覧を取得する為のライブラリです。
 
-TumblrPosts is a class for dealing with tumblr posts through JSONP access.
+## 機能
 
-##This does
+- TumblrのAPIを連続的に読み込んで完了後、インスタンスのメソッドで各情報を取得します。
+- getTags() でカウント付きのタグ一覧を取得します。
+- getPosts() で投稿一覧を取得します。
 
+## 使い方
 
-- Get a list of (all) the posts from Tumblr API through JSONP access.
-- Get a list of tags.
-- Get a post title from "Tumblr Post" object passed by API.
-- Fire the events when loading process goes, or is completed.
+依存ライブラリはjQueryのみです。（1.7+）
 
-##Requires
+```js
 
-
-- [jQuery](http://jquery.com)
-- [jQuery.class.js](http://github.com/mach3/js-jquery-class)
-
-##Usage
+// インスタンスを生成
+var myTumblrPosts = new TumblrPosts();
 
 
-    var posts = new TumblrPost({
-		domain:"example.tumblr.com",
-		maxNum:300
-    });
-    posts.bind( posts.EVENT_COMPLETE, function(e){
-		var obj = this;
-		$.each( this.getPosts(), function( i, post ){
-			console.log( obj.getTitleByPost( post ) );
-		});
-		$.each( this.getTags(), function( i, tag ){
-			console.log( tag.name + tag.count );
-		});
+// 読み込み完了時のイベントハンドラを設定
+myTumblrPosts.on("complete", function(){
+	var $ul, tags;
+
+	// getTags() : タグリストを取得
+	tags = this.getTags();
+	$ul = $("<ul>");
+
+	$.each(tags, function(i, tag){
+		$ul.append(
+			$("<li>").text(tag.name + " (" + tag.count + ")")
+		);
 	});
-	posts.bind( posts.EVENT_PROGRESS, function(e){
-		console.log( this.getLoadedRate() + "% Loaded" );
-    });
-	posts.run();
+
+	$ul.appendTo( $("#your-own-container") );
+});
+
+// 読み込みを開始
+myTumblrPosts.run();
+
+```
+
+## メソッド
+
+### on/off/trigger()
+
+jQuery.fn.on/off/trigger()へのエイリアスです。
+一応bind/unbind() へのエイリアスも残してあります。
+
+### config([option])
+
+オプションを設定/あるいは取得します。
+
+- (Object) option : 設定するオプション
+
+```js
+myTumblrPosts.config({
+	domain : "www.example.com", // 対象のTumblrのドメイン
+	maxNum : 80 // 読み込む投稿の最大値
+});
+
+myTumblrPosts("domain"); // => "www.example.com"
+myTumblrPosts(); // => { domain : "www.example.com", maxNum : 80 }
+
+```
+
+### getTags([order])
+
+タグリストを配列で返します。
+配列の内容は、{ name : "photo", count : 10 } のようなオブジェクトです。
+
+- (String) order : countによる昇順・降順の並び替えを行います。 "desc" または "asc"。
+
+```js
+var tags = myTumblrPosts.getTags("desc");
+```
+
+### getPosts([offset], [count])
+
+投稿リストを配列で返します。配列の内容は、Tumblr APIに準拠します。
+
+- (Integer) offset : 取得開始インデックス
+- (Integer) count : 取得投稿数
+
+### getTitleByPost(post)
+
+Tumblr APIのpostオブジェクトからタイトルを取得しようとがんばります。
+出来なかった場合は空白を返します。
+
+```js
+$.each(myTumblrPosts.getPosts(), function(i, post){
+	var title = myTumblrPosts.getTitleByPost(post);
+});
+```
 
 
+## 作者
+
+mach3ss
+
+- [twitter](http://twitter.com/mach3ss)
+- [blog](http://blog.mach3.jp)
+- [website](http://www.mach3.jp)
 
 
-##Methods
-
-### run() : void
-
-Start to load Tumblr API and reading the posts.  
-"complete" event is fired when it's done.
-"progress" event is fired when it goes to load next JSON.
-
-### getTags() : Array
-
-Get list of the tags from all the posts it read.
-
-### getPosts() : Array
-
-Get list of the tumblr post objects.  
-You may use this when displaying the latest posts list.
-
-### getTitleByPost() : Stirng
-
-Get title from the tumblr post objects.  
-
-### getLoadedRate() : Number
-
-Get the rate how does the loading API progress.
-
-	
-##Author
-
-
-- [blog.mach3.jp](http://blog.mach3.jp/)
-- [follow @mach3ss](http://twitter.com/mach3ss)
-
-
-##License
-
-###The MIT License
-
-Copyright (c) 2010, matsukaze.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
