@@ -59,8 +59,8 @@ myTumblrPosts.config({
 	maxNum : 80 // 読み込む投稿の最大値
 });
 
-myTumblrPosts("domain"); // => "www.example.com"
-myTumblrPosts(); // => { domain : "www.example.com", maxNum : 80 }
+myTumblrPosts.config("domain"); // => "www.example.com"
+myTumblrPosts.config(); // => { domain : "www.example.com", maxNum : 80 }
 
 ```
 
