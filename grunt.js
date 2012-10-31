@@ -1,23 +1,34 @@
 
 module.exports = function(grunt){
 
+	grunt.loadNpmTasks("grunt-contrib");
+
 	grunt.initConfig({
-		concat : {
-			"dist/tumblrposts.min.js" : [
-				"scripts/intro.js",
-				"scripts/tumblrposts.min.js"
-			],
-			"dist/tumblrposts.js" : [
-				"scripts/intro.js",
-				"scripts/tumblrposts.js"
+
+		clean : {
+			dist : [
+				"dist/tumblrposts.min.js",
+				"dist/tumblrposts.js"
 			]
 		},
+
+		meta : {
+			banner : grunt.file.read("scripts/banner.js")
+		},
+
 		min : {
-			"scripts/tumblrposts.min.js" : ["scripts/tumblrposts.js"]
+			"dist/tumblrposts.min.js" : ["<banner>", "scripts/tumblrposts.js"]
+		},
+
+		concat : {
+			dist : {
+				dest : "dist/tumblrposts.js",
+				src : ["<banner>", "scripts/tumblrposts.js"],
+				separator : ""
+			}
 		}
 	});
 
-	grunt.registerTask("default", "min concat");
-
+	grunt.registerTask("default", "clean concat min");
 
 };
