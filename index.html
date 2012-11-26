@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Js-tumblrposts.js by mach3</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Js-tumblrposts.js</h1>
+        <p>Class for dealing with Tumblr Posts through JSONP access.</p>
+        <p class="view"><a href="https://github.com/mach3/js-tumblrposts.js">View the Project on GitHub <small>mach3/js-tumblrposts.js</small></a></p>
+        <ul>
+          <li><a href="https://github.com/mach3/js-tumblrposts.js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mach3/js-tumblrposts.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mach3/js-tumblrposts.js">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>TumblrPosts.js</h1>
+
+<p>Tumblrのタグ一覧および投稿一覧を取得する為のライブラリです。</p>
+
+<h2>機能</h2>
+
+<ul>
+<li>TumblrのAPIを連続的に読み込んで完了後、インスタンスのメソッドで各情報を取得します。</li>
+<li>getTags() でカウント付きのタグ一覧を取得します。</li>
+<li>getPosts() で投稿一覧を取得します。</li>
+</ul><h2>使い方</h2>
+
+<p>依存ライブラリはjQueryのみです。（1.7+）</p>
+
+<div class="highlight"><pre>
+<span class="c1">// インスタンスを生成</span>
+<span class="kd">var</span> <span class="nx">myTumblrPosts</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TumblrPosts</span><span class="p">();</span>
+
+
+<span class="c1">// 読み込み完了時のイベントハンドラを設定</span>
+<span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"complete"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">$ul</span><span class="p">,</span> <span class="nx">tags</span><span class="p">;</span>
+
+    <span class="c1">// getTags() : タグリストを取得</span>
+    <span class="nx">tags</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getTags</span><span class="p">();</span>
+    <span class="nx">$ul</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"&lt;ul&gt;"</span><span class="p">);</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">tags</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">tag</span><span class="p">){</span>
+        <span class="nx">$ul</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s2">"&lt;li&gt;"</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">tag</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s2">" ("</span> <span class="o">+</span> <span class="nx">tag</span><span class="p">.</span><span class="nx">count</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">)</span>
+        <span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">$ul</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#your-own-container"</span><span class="p">)</span> <span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// 読み込みを開始</span>
+<span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+
+</pre></div>
+
+<h2>メソッド</h2>
+
+<h3>on/off/trigger()</h3>
+
+<p>jQuery.fn.on/off/trigger()へのエイリアスです。
+一応bind/unbind() へのエイリアスも残してあります。</p>
+
+<h3>config([option])</h3>
+
+<p>オプションを設定/あるいは取得します。</p>
+
+<ul>
+<li>(Object) option : 設定するオプション</li>
+</ul><div class="highlight"><pre><span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">domain</span> <span class="o">:</span> <span class="s2">"www.example.com"</span><span class="p">,</span> <span class="c1">// 対象のTumblrのドメイン</span>
+    <span class="nx">maxNum</span> <span class="o">:</span> <span class="mi">80</span> <span class="c1">// 読み込む投稿の最大値</span>
+<span class="p">});</span>
+
+<span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">config</span><span class="p">(</span><span class="s2">"domain"</span><span class="p">);</span> <span class="c1">// =&gt; "www.example.com"</span>
+<span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">config</span><span class="p">();</span> <span class="c1">// =&gt; { domain : "www.example.com", maxNum : 80 }</span>
+
+</pre></div>
+
+<h3>getTags([order])</h3>
+
+<p>タグリストを配列で返します。
+配列の内容は、{ name : "photo", count : 10 } のようなオブジェクトです。</p>
+
+<ul>
+<li>(String) order : countによる昇順・降順の並び替えを行います。 "desc" または "asc"。</li>
+</ul><div class="highlight"><pre><span class="kd">var</span> <span class="nx">tags</span> <span class="o">=</span> <span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">getTags</span><span class="p">(</span><span class="s2">"desc"</span><span class="p">);</span>
+</pre></div>
+
+<h3>getPosts([offset], [count])</h3>
+
+<p>投稿リストを配列で返します。配列の内容は、Tumblr APIに準拠します。</p>
+
+<ul>
+<li>(Integer) offset : 取得開始インデックス</li>
+<li>(Integer) count : 取得投稿数</li>
+</ul><h3>getTitleByPost(post)</h3>
+
+<p>Tumblr APIのpostオブジェクトからタイトルを取得しようとがんばります。
+出来なかった場合は空白を返します。</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">getPosts</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">post</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">myTumblrPosts</span><span class="p">.</span><span class="nx">getTitleByPost</span><span class="p">(</span><span class="nx">post</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>作者</h2>
+
+<p>mach3ss</p>
+
+<ul>
+<li><a href="http://twitter.com/mach3ss">twitter</a></li>
+<li><a href="http://blog.mach3.jp">blog</a></li>
+<li><a href="http://www.mach3.jp">website</a></li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/mach3">mach3</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
